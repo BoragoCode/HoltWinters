@@ -1,4 +1,31 @@
 import pandas as pd
+series = [3,10,12,13,12,10,12]
+def average(series):
+    return float(sum(series))/len(series)
+print ("Promedio ",average(series))
+
+def moving_average(series, n):
+    return average(series[-n:])
+
+print ("Promedio movil (3)",moving_average(series,3))
+print ("Promedio movil (4)",moving_average(series,4))
+
+def weighted_average(series, weights):
+    result = 0.0
+    weights.reverse()
+    for n in range(len(weights)):
+        result += series[-n-1] * weights[n]
+    return result
+weights = [0.1,0.2,0.3, 0.4]
+print ("Promedio ponderado",weighted_average(series,weights))
+
+def exponential_smoothing(series, alpha):
+    result = [series[0]] # first value is same as series
+    for n in range(1, len(series)):
+        result.append(alpha * series[n] + (1 - alpha) * result[n-1])
+    return result
+print ("Suavizamiento exponencial alpha bajo",exponential_smoothing(series, 0.1))
+print ("Suavizamiento exponencial alpha alto",exponential_smoothing(series, 0.9))
 
 series = [30,21,29,31,40,48,53,47,37,39,31,29,17,9,20,24,27,35,41,38,
           27,31,27,26,21,13,21,18,33,35,40,36,22,24,21,20,17,14,17,19,
