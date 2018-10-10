@@ -5,29 +5,28 @@ series = [30,21,29,31,40,48,53,47,37,39,31,29,17,9,20,24,27,35,41,38,
           26,29,40,31,20,24,18,26,17,9,17,21,28,32,46,33,23,28,22,27,
           18,8,17,21,31,34,44,38,31,30,26,32]
 df = pd.DataFrame(series)
-df.
 plot=df.plot()
 fig =plot.get_figure()
 fig.savefig('salida.png')
 
-def initial_trend(series, slen):
+def initial_trend(series, L):
     sum = 0.0
-    for i in range(slen):
-        sum += float(series[i+slen] - series[i]) / slen
-    return sum / slen
+    for i in range(L):
+        sum += float(series[i+L] - series[i]) / L
+    return sum / L
 
-def initial_seasonal_components(series, slen):
+def initial_seasonal_components(series, L):
     seasonals = {}
     season_averages = []
-    n_seasons = int(len(series)/slen)
+    n_seasons = int(len(series)/L)
     # compute season averages
     for j in range(n_seasons):
-        season_averages.append(sum(series[slen*j:slen*j+slen])/float(slen))
+        season_averages.append(sum(series[L*j:L*j+L])/float(L))
     # compute initial values
-    for i in range(slen):
+    for i in range(L):
         sum_of_vals_over_avg = 0.0
         for j in range(n_seasons):
-            sum_of_vals_over_avg += series[slen*j+i]-season_averages[j]
+            sum_of_vals_over_avg += series[L*j+i]-season_averages[j]
         seasonals[i] = sum_of_vals_over_avg/n_seasons
     return seasonals
 
@@ -51,4 +50,7 @@ def triple_exponential_smoothing(series, slen, alpha, beta, gamma, n_preds):
             result.append(smooth+trend+seasonals[i%slen])
     return result
 
+
 print initial_trend(series,12)
+
+print (initial_seasonal_components(series, 12))
