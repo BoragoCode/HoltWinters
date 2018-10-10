@@ -27,6 +27,24 @@ def exponential_smoothing(series, alpha):
 print ("Suavizamiento exponencial alpha bajo",exponential_smoothing(series, 0.1))
 print ("Suavizamiento exponencial alpha alto",exponential_smoothing(series, 0.9))
 
+def double_exponential_smoothing(series, alpha, beta):
+    result = [series[0]]
+    for n in range(1, len(series)+1):
+        if n == 1:
+            level, trend = series[0], series[1] - series[0]
+        if n >= len(series): # we are forecasting
+          value = result[-1]
+        else:
+          value = series[n]
+        last_level, level = level, alpha*value + (1-alpha)*(level+trend)
+        trend = beta*(level-last_level) + (1-beta)*trend
+        result.append(level+trend)
+    return result
+
+print("Suavizamiento exponencial doble",double_exponential_smoothing(series,0.9,0.9))
+
+#Hasta aqui la clase de hoy :)
+
 series = [30,21,29,31,40,48,53,47,37,39,31,29,17,9,20,24,27,35,41,38,
           27,31,27,26,21,13,21,18,33,35,40,36,22,24,21,20,17,14,17,19,
           26,29,40,31,20,24,18,26,17,9,17,21,28,32,46,33,23,28,22,27,
